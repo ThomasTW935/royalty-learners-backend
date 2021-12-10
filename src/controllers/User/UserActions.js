@@ -1,4 +1,7 @@
 import User from '../../models/User.js'
+import * as bcrypt from "bcrypt"
+import * as jwt from "jsonwebtoken"
+import {auth} from "../../middleware/auth.js"
 
 
 const createUser = async (req,res)=> {
@@ -42,7 +45,7 @@ const createUser = async (req,res)=> {
 const loginUser = async (req,res)=>{
   try{
 
-    const {usrename, password} = req.body
+    const {username, password} = req.body
 
     if(!username || !password)
       return res.status(400).json({msg:"Not all fields have been entered."})
@@ -63,6 +66,28 @@ const loginUser = async (req,res)=>{
   }catch(err){
     res.status(500).json({error: err.message})
   }
+}
+const tokenIsValid = async (req,res)=> {
+  try{
+    const token = req.header("x-auth-token")
+    if(!token) return res.json(false)
+    const verified = jwt.verify(token,process.env.JWT_SECRET)
+    if(!verified) return res.json(false)
+    const user = await User.findById(verified.id)
+    if(!user) return res.json(false)
+    return res.json(true)
+  }catch(err){
+    res.status(500).json({error: err.message})
+  }
+}
+
+const getUser = async (req,res)=> {
+  const user = await User.findById(req.user)
+  res.json({
+    id: user._id,
+    first_name: user.first_name,
+    last_name: user.last_name
+  })
 }
 
 export {createUser, loginUser}
