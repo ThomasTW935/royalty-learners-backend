@@ -1,10 +1,15 @@
 import express from "express";
+import {auth} from "../../middleware/auth.js"
 
-import {createUser} from "../../controllers/User/UserActions.js"
+
+import {createUser, loginUser, getUser, tokenIsValid} from "../../controllers/User/UserActions.js"
 
 const users = express.Router();
 
-users.get("/", (req,res) => {});
-users.post("/", createUser);
+users.post("/register", createUser);
+users.post("/login", loginUser);
+// users.delete("/delete", createUser);
+users.delete("/tokenIsValid", tokenIsValid);
+users.get("/",auth, getUser);
 
 export default users;

@@ -1,22 +1,22 @@
 import User from '../../models/User.js'
 import * as bcrypt from "bcrypt"
 import * as jwt from "jsonwebtoken"
-import {auth} from "../../middleware/auth.js"
 
 
 const createUser = async (req,res)=> {
   try{
-    let {username,password,passwordCheck,firstName,lastName} = req.body
-
+    let {username,password,first_name,last_name} = req.body
+    console.log(req.body)
+    console.log(username)
+    console.log(password)
+    console.log(first_name)
+    console.log(last_name)
     //validate
-    if(!username || !password || !passwordCheck || !firstName || !lastName)
+    if(!username || !password || !first_name || !last_name)
       return res.status(400).json({msg:"Not all fields have been entered."})
 
     if(password.length<5)
       return res.status(400).json({msg:"The password needs to be at least 5 characters long."})
-
-    if(password !== passwordCheck)
-      return res.status(400).json({msg:"Enter the same password twice for verification."})
 
     const existingUser = await User.findOne({username: username})
 
@@ -27,11 +27,11 @@ const createUser = async (req,res)=> {
 
     const passwordHash = await bcrypt.hash(password,salt)
 
-    const newUser = newUser({
+    const newUser = new User({
       username,
       password: passwordHash,
-      first_name: firstName,
-      last_name: lastName
+      first_name: first_name,
+      last_name: last_name
     })
 
     const savedUser = await newUser.save()
@@ -90,4 +90,4 @@ const getUser = async (req,res)=> {
   })
 }
 
-export {createUser, loginUser}
+export {createUser, loginUser, getUser, tokenIsValid}
