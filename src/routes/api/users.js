@@ -8,8 +8,8 @@ const users = express.Router();
 
 users.post("/register", createUser);
 users.post("/login", loginUser);
+users.post("/tokenIsValid", tokenIsValid);
 // users.delete("/delete", createUser);
-users.delete("/tokenIsValid", tokenIsValid);
 users.get("/",auth, getUser);
 
 export default users;

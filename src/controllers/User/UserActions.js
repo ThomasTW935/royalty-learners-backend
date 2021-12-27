@@ -64,7 +64,6 @@ const loginUser = async (req,res)=>{
     const token = jsonwebtoken.sign({id: user._id}, process.env.JWT_SECRET)
     console.log(user)
     res.json({token,user:{id: user._id, first_name: user.first_name, last_name: user.last_name}})
-
   }catch(err){
     res.status(500).json({error: err.message})
   }
