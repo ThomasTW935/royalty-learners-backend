@@ -82,13 +82,6 @@ const tokenIsValid = async (req,res)=> {
   }
 }
 
-const getUser = async (req,res)=> {
-  const user = await User.findById(req.user)
-  res.json({
-    id: user._id,
-    first_name: user.first_name,
-    last_name: user.last_name
-  })
-}
 
-export {createUser, loginUser, getUser, tokenIsValid}
+
+export {createUser, loginUser, tokenIsValid}
