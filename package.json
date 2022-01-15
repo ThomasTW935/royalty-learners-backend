@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/server.ts",
+    "start": "node src/server.js",
     "client": "npm start --prefix ../front-end",
     "server": "nodemon src/server.js",
     "dev": "concurrently \"npm run client\" \"npm run server\"",
