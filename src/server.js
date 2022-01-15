@@ -20,7 +20,7 @@ mongoose
 
 
 // Routes
-
+app.get('/', (req, res) => { res.send('Hello from Express!')})
 
 app.use('/login', (req,res)=>{
   res.send({
