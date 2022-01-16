@@ -6,11 +6,7 @@ import jsonwebtoken from "jsonwebtoken"
 const createUser = async (req,res)=> {
   try{
     let {username,password,first_name,last_name} = req.body
-    console.log(req.body)
-    console.log(username)
-    console.log(password)
-    console.log(first_name)
-    console.log(last_name)
+    
     //validate
     if(!username || !password || !first_name || !last_name)
       return res.status(400).json({msg:"Not all fields have been entered."})
@@ -23,15 +19,11 @@ const createUser = async (req,res)=> {
     if(existingUser)
       return res.status(400).json({msg:"An account with this username already exists."})
     
-    const salt = await bcrypt.genSalt()
-
-    const passwordHash = await bcrypt.hash(password,salt)
-
     const newUser = new User({
       username,
-      password: passwordHash,
-      first_name: first_name,
-      last_name: last_name
+      password,
+      first_name,
+      last_name
     })
 
     const savedUser = await newUser.save()
@@ -43,11 +35,10 @@ const createUser = async (req,res)=> {
   }
 }
 const loginUser = async (req,res)=>{
+  
   try{
-
+    
     const {username, password} = req.body
-    console.log(username)
-    console.log(password)
 
     if(!username || !password)
       return res.status(400).json({msg:"Not all fields have been entered."})
@@ -57,12 +48,12 @@ const loginUser = async (req,res)=>{
     if(!user)
       return res.status("No account with this email has been registered.")
      
-    const passwordIsMatch = await bcrypt.compare(password, user.password)
+    const passwordIsMatch = user.password === password
+
     if(!passwordIsMatch)
       return res.status(400).json({msg:"Invalid credentials."})
 
-    const token = jsonwebtoken.sign({id: user._id}, process.env.JWT_SECRET)
-    console.log(user)
+    const token = "token123"
     res.json({token,user:{id: user._id, first_name: user.first_name, last_name: user.last_name}})
   }catch(err){
     res.status(500).json({error: err.message})
