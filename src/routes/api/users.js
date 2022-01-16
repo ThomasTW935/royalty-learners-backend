@@ -11,7 +11,7 @@ users.post("/register", createUser);
 users.post("/login", loginUser);
 users.post("/tokenIsValid", tokenIsValid);
 // users.delete("/delete", createUser);
-users.get("/",auth, getUser);
+users.post("/", getUser);
 users.get("/all", getUsers);
 
 export default users;
